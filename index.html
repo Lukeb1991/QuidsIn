@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#160a2a">
+<title>Quids In · Puzzl</title>
+<meta name="description" content="Three logic questions. Sixty seconds each. Every second left is £1 in the bank. A daily gameshow puzzle from Puzzl.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Puzzl">
+<meta property="og:title" content="Quids In · Where quick thinking pays off!">
+<meta property="og:description" content="Three logic questions. Sixty seconds each. Every second left is £1 in the bank.">
+<meta property="og:url" content="https://lukeb1991.github.io/QuidsIn/">
+<meta property="og:image" content="https://lukeb1991.github.io/QuidsIn/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lukeb1991.github.io/QuidsIn/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💷%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=DM+Serif+Display:ital@0;1&family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+:root{
+  --stage:#160a2a;--stage2:#22103f;--panel:#2b1452;--panel2:#341a63;--line:rgba(247,201,72,.28);
+  --gold:#f7c948;--gold2:#ffe39a;--brass:#b9821c;--pink:#ff3d8b;--cyan:#3be3ff;
+  --text:#fff6fb;--muted:#b9a6d6;--ok:#4ade80;--amber:#ffb020;--bad:#ff5a6e;--none:#3a2560;
+  --purple:#a855f7;--grad:linear-gradient(90deg,var(--purple),var(--pink));
+  --serif:'DM Serif Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;--led:'DotGothic16',ui-monospace,monospace;
+  color-scheme:dark;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+/* Puzzl is a dark brand: same palette whatever the viewer's theme */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--stage:#160a2a;--text:#fff6fb}}
+:root[data-theme="dark"]{--stage:#160a2a;--text:#fff6fb}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:var(--sans);color:var(--text);-webkit-font-smoothing:antialiased;background-color:var(--stage);
+  background:radial-gradient(ellipse 120% 40% at 50% 104%,rgba(255,61,139,.22),transparent 60%) fixed,
+             radial-gradient(ellipse 90% 50% at 50% -10%,rgba(168,85,247,.35),transparent 65%) fixed,var(--stage)}
+/* Studio spotlights */
+.beams{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.beam{position:absolute;top:-20vh;width:70vw;max-width:520px;height:140vh;transform-origin:50% 0;filter:blur(8px);
+  background:linear-gradient(180deg,rgba(255,240,200,.16),rgba(255,240,200,0) 78%);clip-path:polygon(46% 0,54% 0,100% 100%,0 100%)}
+.beam.l{left:-14vw;transform:rotate(-24deg);animation:sweepL 9s ease-in-out infinite alternate}
+.beam.r{right:-14vw;transform:rotate(24deg);animation:sweepR 11s ease-in-out infinite alternate;background:linear-gradient(180deg,rgba(59,227,255,.13),rgba(59,227,255,0) 78%)}
+@keyframes sweepL{to{transform:rotate(-10deg)}}
+@keyframes sweepR{to{transform:rotate(12deg)}}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:8px}
+[hidden]{display:none!important}
+
+.wrap{max-width:480px;margin:0 auto;padding:16px 16px 32px}
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:44px}
+.top-l{display:flex;gap:8px}.top-r{display:flex;justify-content:flex-end}
+.icon{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(43,20,82,.8);color:var(--gold2);font:700 16px var(--sans);display:grid;place-items:center}
+.icon svg{width:15px;height:15px;fill:currentColor}
+.icon svg.spk{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.icon[aria-pressed="false"] .on,.icon[aria-pressed="true"] .off{display:none}
+.kicker{font:400 15px var(--led);letter-spacing:.12em;color:var(--cyan);text-shadow:0 0 8px rgba(59,227,255,.6)}
+
+/* £1 coin and slot: the coin drops in when you're right */
+.emblem{width:84px;height:78px;margin:6px auto 0}
+.emblem svg{width:100%;height:100%;overflow:visible}
+#coinG{animation:bob 3s ease-in-out infinite}
+#coinG.drop{animation:drop .9s cubic-bezier(.5,0,.75,0) both}
+@keyframes bob{50%{transform:translateY(-4px)}}
+@keyframes drop{0%{transform:translateY(-6px)}30%{transform:translateY(-12px)}100%{transform:translateY(64px)}}
+.slotglow{opacity:0}
+.slotglow.on{animation:glow 1s ease-out .6s}
+@keyframes glow{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+
+h1{font:400 58px/1 var(--serif);text-align:center;margin-top:2px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 18px rgba(255,61,139,.35))}
+.sub{font:italic 400 22px var(--serif);color:var(--gold2);text-align:center;margin-top:4px}
+
+/* Status row */
+.status{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;margin:18px 2px 12px}
+.buzzers{display:flex;gap:6px}
+.buzz{width:30px;height:28px;display:block}
+.buzz svg{width:100%;height:100%;overflow:visible}
+.buzz .dome{transition:transform .2s}
+.buzz:not(.out) svg{filter:drop-shadow(0 0 5px rgba(255,61,90,.55))}
+.buzz.out .dome{transform:translateY(3px)}
+.buzz.out .dome path{fill:#4a3a63}.buzz.out .dome ellipse{fill:#3b2d52}.buzz.out .shine{opacity:0}
+.buzz.out.fresh svg{animation:press .7s ease both}
+@keyframes press{0%{filter:drop-shadow(0 0 12px rgba(255,61,90,1)) brightness(1.6)}40%{transform:scale(.88)}100%{transform:none;filter:none}}
+.pips{display:flex;gap:6px}
+.pip{width:14px;height:14px;border-radius:4px;background:var(--none);border:1px solid transparent}
+.pip.cur{border-color:var(--gold);background:transparent}
+.clean{background:var(--ok)}.helped{background:var(--amber)}.missed{background:var(--bad)}.skipped{background:var(--none)}
+.bank{justify-self:end}
+.led{font-family:var(--led);background:#0c0618 radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1.3px) 0 0/4px 4px;border:1px solid rgba(59,227,255,.25);border-radius:8px;padding:4px 10px;color:var(--cyan);text-shadow:0 0 8px currentColor}
+.bank{font-size:17px;color:var(--gold);border-color:rgba(247,201,72,.35)}
+.bank.ping{animation:ping .6s ease}
+@keyframes ping{40%{transform:scale(1.15)}}
+
+/* The podium */
+.podium{position:relative;border-radius:20px 20px 10px 10px;padding:12px 14px 0;border:2px solid rgba(247,201,72,.45);
+  background:linear-gradient(180deg,var(--panel2),var(--panel) 60%,#220f44);box-shadow:0 18px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+.podium-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.round{font-size:15px;color:var(--pink);border-color:rgba(255,61,139,.35);letter-spacing:.08em}
+.clock{font-size:22px;min-width:74px;text-align:center}
+.clock.warn{color:var(--amber);border-color:rgba(255,176,32,.4)}
+.clock.urgent{color:var(--pink);border-color:rgba(255,61,139,.5);animation:throb 1s steps(2) infinite}
+@keyframes throb{50%{opacity:.55}}
+.qtext{font:700 21px/1.4 var(--sans);letter-spacing:-.005em;min-height:2.8em}
+.caret{display:inline-block;width:3px;height:1em;background:var(--gold);vertical-align:-3px;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.show{margin-top:14px;font:400 24px/1.45 var(--led);color:var(--gold);text-align:center;white-space:pre-line;padding:12px 10px;word-spacing:.08em;border-color:rgba(247,201,72,.3)}
+.intro{font:500 17px/1.55 var(--sans);color:#ece0ff}
+.intro b{color:var(--gold2)}
+.host{position:relative;margin-top:14px;padding:10px 12px 10px 40px;border-radius:12px;background:rgba(59,227,255,.08);border:1px dashed rgba(59,227,255,.35);font:500 15px/1.45 var(--sans);color:#d9f8ff}
+.host::before{content:"";position:absolute;left:12px;top:11px;width:18px;height:18px;background:var(--cyan);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='8' y='2' width='8' height='12' rx='4'/%3E%3Cpath d='M5 11a7 7 0 0 0 14 0h-2a5 5 0 0 1-10 0zM11 18h2v4h-2z'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='8' y='2' width='8' height='12' rx='4'/%3E%3Cpath d='M5 11a7 7 0 0 0 14 0h-2a5 5 0 0 1-10 0zM11 18h2v4h-2z'/%3E%3C/svg%3E") center/contain no-repeat}
+.reveal{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);text-align:center}
+.reveal .lab{display:block;font:400 13px var(--led);letter-spacing:.14em;color:var(--muted);margin-bottom:4px}
+.word{display:block;font:400 36px/1.15 var(--serif);color:var(--gold2)}
+.word.lost{color:#ff9aaa}
+.why{margin-top:10px;font:500 15px/1.5 var(--sans);color:#e3d6f7;text-align:left;background:rgba(0,0,0,.18);border-radius:10px;padding:10px 12px}
+.why b{color:var(--gold2)}
+/* Podium front: the lights go out as time runs down */
+.bulbs{display:flex;justify-content:space-between;gap:4px;margin:16px -14px 0;padding:10px 14px;border-top:2px solid rgba(247,201,72,.35);border-radius:0 0 8px 8px;background:linear-gradient(180deg,#1a0b33,#120725)}
+.bulb{flex:1;max-width:22px;aspect-ratio:1;border-radius:50%;background:#3a2a52;transition:background .25s,box-shadow .25s}
+.bulb.on{background:radial-gradient(circle at 35% 35%,#fff7d6,var(--gold) 45%,var(--brass));box-shadow:0 0 8px rgba(247,201,72,.75)}
+.bulbs.urgent .bulb.on{background:radial-gradient(circle at 35% 35%,#ffd6e6,var(--pink) 50%,#b0175a);box-shadow:0 0 10px rgba(255,61,139,.85);animation:throb .5s steps(2) infinite}
+
+/* Answers */
+.opts{display:grid;gap:10px;margin-top:14px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opt{display:flex;align-items:center;gap:12px;min-height:54px;padding:8px 14px 8px 8px;border-radius:14px;text-align:left;font:700 17px var(--sans);
+  background:linear-gradient(180deg,#2f175a,#241048);border:2px solid rgba(59,227,255,.35);box-shadow:0 4px 0 #120725;transition:transform .08s,border-color .2s}
+.opt:hover:not(:disabled){border-color:var(--cyan)}
+.opt:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #120725}
+.opt i{flex:0 0 32px;height:32px;border-radius:9px;display:grid;place-items:center;font:400 16px var(--led);font-style:normal;background:#0c0618;color:var(--cyan)}
+.opt.no{opacity:.55;border-color:rgba(255,90,110,.55);text-decoration:line-through;text-decoration-color:var(--bad);cursor:default}
+.opt.no i{color:var(--bad)}
+.opt.yes{border-color:var(--ok);background:linear-gradient(180deg,#14532d,#0f3d22);opacity:1}
+.opt.yes i{color:var(--ok)}
+.opt:disabled{cursor:default}
+.guessrow{display:flex;gap:8px;margin-top:14px}
+input{flex:1;min-width:0;height:54px;border-radius:14px;border:2px solid rgba(59,227,255,.35);background:#12072a;color:var(--text);font:700 19px var(--sans);padding:0 16px;outline:none}
+input::placeholder{color:#7f6aa3;font-weight:500}
+input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(59,227,255,.18)}
+.btn{height:54px;border-radius:14px;padding:0 20px;font:800 16px var(--sans);color:#fff;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 4px 0 #7a1a55}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #7a1a55}
+.btn.ghost{background:transparent;border:2px solid var(--line);color:var(--gold2);box-shadow:none}
+.btn.wide{width:100%}
+.tries{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px}
+.tries span{font:400 13px var(--led);color:#ff9aaa;text-decoration:line-through;padding:3px 8px;border:1px solid rgba(255,90,110,.4);border-radius:6px}
+.msg{min-height:22px;text-align:center;font:700 15px var(--sans);color:var(--muted);margin-top:12px}
+.msg.bad{color:#ff9aaa}.msg.good{color:var(--ok)}
+.actions{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:6px}
+.hintbtn{font:400 14px var(--led);color:var(--cyan);padding:8px 12px;border-radius:8px}
+.hintbtn:disabled{color:#6f5d8d;cursor:default}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* End of the show */
+.result{position:relative;margin-top:20px;text-align:center;border:2px solid rgba(247,201,72,.45);border-radius:20px;padding:22px 18px;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(247,201,72,.14),transparent 70%),linear-gradient(180deg,var(--panel2),var(--panel));animation:in .5s ease both}
+.result .lab{font:400 14px var(--led);letter-spacing:.14em;color:var(--cyan)}
+.verdict{font:400 36px/1.1 var(--serif);margin-top:8px}
+.banked{display:inline-block;margin-top:14px;font-size:40px;padding:6px 18px;color:var(--gold);border-color:rgba(247,201,72,.4)}
+.solved{font:500 16px var(--sans);color:#e3d6f7;margin-top:10px}
+.squares{display:flex;justify-content:center;gap:8px;margin:14px 0 8px}
+.sq{width:38px;height:38px;border-radius:9px}
+.streak{font:400 14px var(--led);color:var(--gold2);letter-spacing:.06em}
+.btns{display:flex;gap:8px;margin-top:18px}.btns .btn{flex:1;padding:0 12px}
+.next{font:400 14px var(--led);color:var(--muted);margin-top:16px}
+.next b{color:var(--cyan);font-weight:400}
+.recap{list-style:none;text-align:left;margin-top:20px;border-top:1px dashed var(--line)}
+.recap li{display:grid;grid-template-columns:14px 1fr;gap:12px;align-items:start;padding:14px 0;border-bottom:1px dashed var(--line)}
+.recap li:last-child{border-bottom:0}
+.recap .sq{width:14px;height:14px;border-radius:4px;margin-top:4px}
+.rr{font:400 12px var(--led);color:var(--pink);letter-spacing:.08em}
+.rq{font:600 15px/1.45 var(--sans);color:#f1e8ff;margin-top:2px}
+.ra{font:400 20px var(--serif);color:var(--gold2);margin-top:4px}
+.ra small{font:400 12px var(--led);color:var(--muted);margin-left:6px}
+.rw{font:500 14px/1.45 var(--sans);color:var(--muted);margin-top:4px}
+
+footer{text-align:center;font:500 13px var(--sans);color:var(--muted);margin-top:28px}
+footer b{color:#fff}
+
+/* Modals */
+.modal{position:fixed;inset:0;background:rgba(10,4,20,.8);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+.modal.open{display:flex}
+.sheet{width:100%;max-width:420px;max-height:calc(100% - 20px);overflow:auto;background:linear-gradient(180deg,var(--panel2),var(--panel));border:2px solid rgba(247,201,72,.4);border-radius:18px;padding:22px;position:relative;animation:in .3s ease both}
+.sheet h2{font:400 30px var(--serif);margin-bottom:12px}
+.sheet p{font:400 15px/1.55 var(--sans);color:#e3d6f7;margin-bottom:10px}
+.sheet p b{color:var(--gold2)}
+.close{position:absolute;top:12px;right:12px}
+.key{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;font:400 14px var(--sans);color:#e3d6f7;margin:6px 0 16px}
+.key i{width:16px;height:16px;border-radius:4px;display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;margin:8px 0 16px}
+.stats b{display:block;font:400 28px var(--serif)}
+.stats span{font:400 11px var(--led);color:var(--muted);letter-spacing:.04em}
+.statlab{font:400 13px var(--led);letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0;font:400 14px var(--led)}
+.bar span{width:12px}
+.bar i{display:block;height:20px;min-width:24px;border-radius:4px;background:var(--none);font-style:normal;text-align:right;padding-right:7px;line-height:20px}
+.bar i.hl{background:var(--grad)}
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--gold);color:var(--stage);font:800 14px var(--sans);padding:10px 18px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:30}
+.toast.show{opacity:1;transform:translateX(-50%)}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.og{padding:20px;text-align:center}.og canvas{width:100%;max-width:1200px}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="beams" aria-hidden="true"><div class="beam l"></div><div class="beam r"></div></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="coinFace" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3c4"/><stop offset=".45" stop-color="#f7c948"/><stop offset="1" stop-color="#c98a1c"/></radialGradient>
+    <radialGradient id="buzzRed" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#ff8a9e"/><stop offset=".5" stop-color="#ff2d55"/><stop offset="1" stop-color="#b0102f"/></radialGradient>
+    <clipPath id="aboveSlot"><rect x="-20" y="-40" width="140" height="94"/></clipPath>
+  </defs>
+</svg>
+
+<main class="wrap">
+  <div class="top">
+    <div class="top-l">
+      <button class="icon" id="helpBtn" aria-label="How to play">?</button>
+      <button class="icon" id="soundBtn" aria-label="Sound" aria-pressed="true"><svg class="spk" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" stroke="none"/><g class="on"><path d="M15.5 9a4.2 4.2 0 0 1 0 6"/><path d="M18 6.5a7.8 7.8 0 0 1 0 11"/></g><g class="off"><path d="M16 9.5l5 5M21 9.5l-5 5"/></g></svg></button>
+    </div>
+    <span class="kicker" id="kicker">EPISODE 1</span>
+    <div class="top-r"><button class="icon" id="statsBtn" aria-label="Your stats"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="8" width="3" height="7" rx="1"/><rect x="6.5" y="4" width="3" height="11" rx="1"/><rect x="12" y="1" width="3" height="14" rx="1"/></svg></button></div>
+  </div>
+
+  <div class="emblem" aria-hidden="true">
+    <svg viewBox="0 0 84 78">
+      <g clip-path="url(#aboveSlot)">
+        <g id="coinG">
+          <polygon points="48.47,5.85 59.68,12.32 66.15,23.53 66.15,36.47 59.68,47.68 48.47,54.15 35.53,54.15 24.32,47.68 17.85,36.47 17.85,23.53 24.32,12.32 35.53,5.85" fill="#a86d10"/>
+          <polygon points="48.47,3.85 59.68,10.32 66.15,21.53 66.15,34.47 59.68,45.68 48.47,52.15 35.53,52.15 24.32,45.68 17.85,34.47 17.85,21.53 24.32,10.32 35.53,3.85" fill="url(#coinFace)"/>
+          <polygon points="47.05,9.16 55.79,14.21 60.84,22.95 60.84,33.05 55.79,41.79 47.05,46.84 36.95,46.84 28.21,41.79 23.16,33.05 23.16,22.95 28.21,14.21 36.95,9.16" fill="none" stroke="#b9821c" stroke-width="1.6" stroke-dasharray="2.2 2.4"/>
+          <text x="42" y="36.5" text-anchor="middle" font-family="DM Serif Display,Georgia,serif" font-size="24" fill="#8a5a0a">£1</text>
+        </g>
+      </g>
+      <rect x="6" y="54" width="72" height="20" rx="8" fill="#2b1452" stroke="#f7c948" stroke-opacity=".55" stroke-width="2"/>
+      <rect x="18" y="61" width="48" height="6" rx="3" fill="#0c0618"/>
+      <rect class="slotglow" id="slotGlow" x="18" y="61" width="48" height="6" rx="3" fill="#ffe39a" style="filter:drop-shadow(0 0 6px #f7c948)"/>
+    </svg>
+  </div>
+  <h1>Quids In</h1>
+  <p class="sub">Where quick thinking pays off!</p>
+
+  <section id="play">
+    <div class="status">
+      <div class="buzzers" id="lives" role="img" aria-label="3 buzzers left"></div>
+      <div class="pips" id="pips" role="img" aria-label="Tonight's progress"></div>
+      <div class="bank led" id="bank" aria-label="Money banked">£0</div>
+    </div>
+
+    <article class="podium" id="podium">
+      <div class="podium-top"><span class="round led" id="round">ROUND 1</span><span class="clock led" id="clock">1:00</span></div>
+      <div id="cardBody"></div>
+      <div class="bulbs" id="bulbs" aria-hidden="true"></div>
+    </article>
+
+    <div class="opts" id="opts" hidden></div>
+    <div class="guessrow" id="form" hidden>
+      <input id="guess" type="text" placeholder="Type your answer" maxlength="40" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Your answer">
+      <button class="btn" type="button" id="answerBtn">Lock it in</button>
+    </div>
+    <div class="tries" id="tries"></div>
+    <p class="msg" id="msg" aria-live="polite"></p>
+    <div class="actions">
+      <button class="hintbtn" id="hintBtn" hidden disabled>Nudge unlocks at 0:30</button>
+      <button class="btn wide" id="goBtn" hidden>Start the show</button>
+    </div>
+  </section>
+
+  <section class="result" id="result" hidden></section>
+  <footer>A new daily logic puzzle from <b>Puzzl</b></footer>
+</main>
+
+<div class="modal" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="sheet">
+  <button class="icon close" data-close aria-label="Close">✕</button>
+  <h2 id="helpTitle">How to play</h2>
+  <p>Every episode has <b>three logic questions</b>: Round 1, Round 2 and The Final. No general knowledge needed, just clear thinking.</p>
+  <p>Each question has <b>60 seconds</b> on the clock. <b>Every second left is £1 in the bank</b>, so the faster you get it, the more you win.</p>
+  <p>You've got <b>three buzzers</b> on your podium for the whole show. A wrong answer uses one up, but you can keep trying until the clock runs out. Use all three and the show's over.</p>
+  <p>Stuck? With 30 seconds left, ask the host for a nudge.</p>
+  <div class="key">
+    <i class="clean"></i><span>Got it first time</span>
+    <i class="helped"></i><span>Got it after a nudge or a wrong answer</span>
+    <i class="missed"></i><span>Missed</span>
+    <i class="skipped"></i><span>Didn't make it that far</span>
+  </div>
+  <p>Everyone gets the same questions. A new episode starts every day at 7am UK time.</p>
+  <button class="btn wide" data-close>Let's play!</button>
+</div></div>
+
+<div class="modal" id="statsModal" role="dialog" aria-modal="true" aria-labelledby="statsTitle"><div class="sheet">
+  <button class="icon close" data-close aria-label="Close">✕</button>
+  <h2 id="statsTitle">Your stats</h2>
+  <div class="stats" id="statsGrid"></div>
+  <div class="statlab">QUESTIONS RIGHT PER EPISODE</div>
+  <div id="dist"></div>
+  <p style="margin-top:14px">Next episode in <b id="statsCountdown">--:--:--</b></p>
+</div></div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ================= Settings ================= */
+const SITE_URL   = 'https://lukeb1991.github.io/QuidsIn/';     // ← your live address (share text + share image)
+const RESET_HOUR = 7;                                         // ← new episode each day at this hour, UK time
+const LAUNCH     = '2026-10-10';                              // ← date of Episode 1 (UK time)
+const PER_DAY = 3, LIVES = 3, SECS = 60, HINT_AT = 30, BULBS = 12;
+
+/* ================= Questions =================
+   Each day runs Round 1 (easy) → Round 2 → The Final (hard). Day 1 is LAUNCH; after the last day it loops.
+   q: question · show: a line shown on the scoreboard (optional, \n for new lines)
+   o: multiple-choice options, with a: the index of the right one (0 = first)
+   or no o, and a: list of accepted typed answers (numbers are compared as numbers, so "19.5" = "£19.50")
+   d: how to show the answer (optional) · num: true shows a number keypad on phones · h: the host's nudge · w: why the answer is right (shown after) */
+const Q = (q, x) => ({q, ...x});
+const DAYS = [
+  [ Q("Which word can go in front of BALL, PRINT and NOTE?", {o:["HAND","FOOT","FINGER","KEY"], a:1, h:"Think about what you kick with.", w:"FOOTBALL, FOOTPRINT and FOOTNOTE. None of the others fit all three."}),
+    Q("Mia is taller than Jo. Jo is taller than Sam. Sam is taller than Ali. Who is the second shortest?", {o:["Mia","Jo","Sam","Ali"], a:2, h:"Line them up from tallest to shortest.", w:"Tallest to shortest: Mia, Jo, Sam, Ali. Ali is the shortest, so Sam is second shortest."}),
+    Q("In this code, what number replaces the question mark?", {show:"3 ✦ 4 = 25\n5 ✦ 12 = 169\n6 ✦ 8 = ?", a:["100"], num:true, h:"Square each number first.", w:"Square both numbers and add them: 6 × 6 + 8 × 8 = 36 + 64 = 100."}) ],
+  [ Q("How many months of the year have the letter Y in their name?", {a:["4","four"], num:true, h:"Say them all out loud, in order.", w:"January, February, May and July."}),
+    Q("What number comes next?", {show:"2, 3, 5, 9, 17, ?", a:["33"], num:true, h:"Look at how much it grows each time.", w:"Each number is doubled, then 1 is taken off: 17 × 2 − 1 = 33."}),
+    Q("A sandwich and a drink cost £3.30 together. The sandwich costs £3 more than the drink. How much is the drink, in pence?", {a:["15","0.15","fifteen"], d:"15p", num:true, h:"It isn't 30p. Would the total still be £3.30?", w:"The drink is 15p and the sandwich £3.15. That's £3 more, and £3.30 in total."}) ],
+  [ Q("What letter comes next?", {show:"O, T, T, F, F, S, S, E, ?", o:["N","T","E","O"], a:0, h:"Count to ten.", w:"They're the first letters of One, Two, Three… Eight. Next is Nine."}),
+    Q("Ada, Ben and Cal sit in a row of three seats. Ada isn't on the left. Ben sits directly to the right of Cal. Who's in the middle?", {o:["Ada","Ben","Cal"], a:1, h:"Ben and Cal sit side by side. Where does that leave Ada?", w:"If Cal and Ben took the middle and right seats, Ada would be on the left, which isn't allowed. So it's Cal, Ben, Ada."}),
+    Q("You write out every number from 1 to 50. How many times do you write the digit 4?", {a:["15","fifteen"], num:true, h:"Don't forget the forties.", w:"4, 14, 24, 34 and 44 give five. Then 40 to 49 add ten more 4s at the front: 15."}) ],
+  [ Q("Which shape is the odd one out?", {o:["Triangle","Square","Circle","Pentagon"], a:2, h:"Count the corners.", w:"The circle is the only one with no corners and no straight sides."}),
+    Q("What number comes next?", {show:"3, 6, 11, 18, 27, ?", a:["38"], num:true, h:"Look at the gaps between the numbers.", w:"The gaps grow by 2 each time: +3, +5, +7, +9, then +11. 27 + 11 = 38."}),
+    Q("A clock shows 3:15. What's the angle between the hour hand and the minute hand, in degrees?", {a:["7.5","7 and a half","seven and a half"], d:"7.5°", num:true, h:"At quarter past, the hour hand isn't exactly on the 3.", w:"The minute hand points at the 3. By quarter past, the hour hand has moved a quarter of the way from 3 to 4, and each hour is 30°. A quarter of 30° is 7.5°."}) ],
+  [ Q("Which of these spells a different word backwards?", {o:["PLAN","STAR","MOON","CLAP"], a:1, h:"Read each one from right to left.", w:"STAR backwards is RATS."}),
+    Q("A farmer has 17 sheep. All but 9 run away. How many are left?", {a:["9","nine"], num:true, h:"Read 'all but 9' again, slowly.", w:"All but 9 ran away, so 9 stayed."}),
+    Q("Tom is 4 years older than his sister. In 5 years' time, their ages will add up to 30. How old is Tom now?", {a:["12","twelve"], num:true, h:"In 5 years, both of them will be 5 years older.", w:"Today their ages add up to 30 − 10 = 20. Tom is 4 years older, so he's 12 and she's 8."}) ],
+  [ Q("What number comes next?", {show:"2, 4, 8, 16, ?", o:["24","30","32","36"], a:2, h:"Each number is double the last.", w:"16 doubled is 32."}),
+    Q("Three of these words use exactly the same letters. Which is the odd one out?", {o:["LISTEN","SILENT","ENLIST","LINENS"], a:3, h:"Look for the letter T.", w:"LISTEN, SILENT and ENLIST are anagrams of each other. LINENS has no T and two Ns."}),
+    Q("Moss on a wall doubles in size every day. It covers the whole wall on day 20. On which day did it cover half the wall?", {a:["19","nineteen"], num:true, h:"Work backwards from the end.", w:"It doubles every day, so the day before it covered the whole wall, it covered half: day 19."}) ],
+  [ Q("What comes next?", {show:"MONDAY, WEDNESDAY, FRIDAY, ?", o:["Saturday","Sunday","Monday","Tuesday"], a:1, h:"Every other day.", w:"It skips a day each time: Monday, Wednesday, Friday, Sunday."}),
+    Q("What comes next?", {show:"A1, C3, E5, G7, ?", o:["H8","I9","J10","I8"], a:1, h:"Each letter matches its number.", w:"Every other letter, paired with its place in the alphabet. I is the 9th letter."}),
+    Q("A 3 by 3 grid is made of 9 small squares. How many squares can you find in it altogether, counting every size?", {a:["14","fourteen"], num:true, h:"Small squares join up to make bigger ones.", w:"9 small squares, 4 two-by-two squares and 1 big one: 14."}) ],
+  [ Q("Which number is the odd one out?", {o:["2","4","7","8"], a:2, h:"Odd one out. Literally.", w:"7 is the only odd number."}),
+    Q("I'm thinking of a number. Double it and add 10, and you get 30. What's my number?", {a:["10","ten"], num:true, h:"Work backwards. Take off the 10 first.", w:"30 − 10 = 20, and half of 20 is 10."}),
+    Q("Five friends meet up, and everyone shakes hands with everyone else once. How many handshakes are there?", {a:["10","ten"], num:true, h:"The first person shakes 4 hands. How many new ones does the next person add?", w:"4 + 3 + 2 + 1 = 10."}) ],
+  [ Q("Which word reads the same forwards and backwards?", {o:["LEVER","LEVEL","LATER","LABEL"], a:1, h:"Read each one from right to left.", w:"LEVEL is the same both ways."}),
+    Q("What letter comes next?", {show:"J, F, M, A, M, J, J, ?", o:["A","S","J","O"], a:0, h:"There are twelve of these in a year.", w:"They're the months: January to July, then August."}),
+    Q("A snail climbs a 10-metre wall. Each day it climbs 3 metres, and each night it slips back 2. On which day does it reach the top?", {a:["8","eight"], num:true, h:"On the last day, it gets to the top before night falls.", w:"After 7 days and nights it's 7 metres up. On day 8 it climbs 3 more and reaches the top."}) ],
+  [ Q("How many sides do 3 triangles and 2 squares have altogether?", {a:["17","seventeen"], num:true, h:"3 sides each, then 4 sides each.", w:"3 × 3 = 9, plus 2 × 4 = 8. That's 17."}),
+    Q("Which word can go after STAR, CAT and SWORD?", {o:["LIGHT","FISH","DUST","BOARD"], a:1, h:"They all live in the sea.", w:"STARFISH, CATFISH and SWORDFISH."}),
+    Q("5 bakers take 5 minutes to ice 5 cakes. How many minutes would 50 bakers take to ice 50 cakes?", {a:["5","five"], num:true, h:"How long does one baker take to ice one cake?", w:"Each baker ices one cake in 5 minutes, so 50 bakers ice 50 cakes in the same 5 minutes."}) ],
+  [ Q("What letter comes next?", {show:"Z, Y, X, W, ?", o:["U","V","T","A"], a:1, h:"It's the alphabet in reverse.", w:"Going backwards: W, then V."}),
+    Q("Grace's birthday is on a Wednesday this year. If there's no 29 February in between, what day will her birthday be next year?", {o:["Wednesday","Thursday","Friday","Tuesday"], a:1, h:"A normal year is 52 weeks and one day.", w:"365 days is 52 weeks plus 1 day, so the date moves on by one day: Thursday."}),
+    Q("What's the smallest number of coins you need to make exactly 88p in UK money?", {a:["6","six"], num:true, h:"Start with the biggest coin that fits, then keep going.", w:"50p + 20p + 10p + 5p + 2p + 1p = 88p. Six coins."}) ],
+  [ Q("How many letters of the alphabet come after T?", {a:["6","six"], num:true, h:"Say them: U, V…", w:"U, V, W, X, Y, Z. That's 6."}),
+    Q("Which word has all its letters in alphabetical order?", {o:["ALWAYS","ALMOND","ALMOST","ALREADY"], a:2, h:"Each letter should come later in the alphabet than the one before.", w:"A, L, M, O, S, T are in order. The others go backwards somewhere."}),
+    Q("How many minutes is it until noon, if 48 minutes ago it was twice as many minutes past 9am?", {a:["44","forty four"], num:true, h:"It's somewhere between 11am and noon.", w:"It's 11:16, which is 44 minutes before noon. 48 minutes ago it was 10:28, which is 88 minutes past 9. And 88 is twice 44."}) ],
+  [ Q("In a race, you overtake the person in second place. What place are you in now?", {o:["First","Second","Third"], a:1, h:"Who's still in front of you?", w:"You've taken their place, so you're second. The leader is still ahead of you."}),
+    Q("What number comes next?", {show:"1, 1, 2, 3, 5, 8, ?", a:["13","thirteen"], num:true, h:"Look at the two numbers before each one.", w:"Each number is the two before it added together: 5 + 8 = 13."}),
+    Q("A bag holds 3 red balls and 3 blue balls. You take out 2 without looking. Which is more likely?", {o:["They match","They don't match","Both are equally likely"], a:1, h:"Once you've taken the first ball, what's left in the bag?", w:"Whatever colour you pick first, 2 of the 5 balls left match it and 3 don't. So a mismatch is more likely."}) ],
+  [ Q("How many legs do 3 dogs and 2 chickens have altogether?", {a:["16","sixteen"], num:true, h:"Dogs have 4 legs, chickens have 2.", w:"3 × 4 = 12, plus 2 × 2 = 4. That's 16."}),
+    Q("Which number is the odd one out?", {o:["121","232","343","455"], a:3, h:"Read each one backwards.", w:"121, 232 and 343 read the same backwards. 455 doesn't."}),
+    Q("What comes next?", {show:"1, 11, 21, 1211, 111221, ?", a:["312211"], num:true, h:"Read each one out loud, describing the one before it.", w:"Each number describes the one before. 111221 is three 1s, two 2s and one 1: 312211."}) ],
+  [ Q("How many corners does a cube have?", {a:["8","eight"], num:true, h:"Four on top, and…", w:"4 corners on the top and 4 on the bottom."}),
+    Q("If yesterday was Friday, what day will it be the day after tomorrow?", {o:["Sunday","Monday","Tuesday","Saturday"], a:1, h:"Work out what today is first.", w:"Today is Saturday and tomorrow is Sunday, so the day after tomorrow is Monday."}),
+    Q("What number replaces the question mark?", {show:"2 → 5\n3 → 10\n4 → 17\n6 → ?", a:["37"], num:true, h:"Try multiplying each number by itself.", w:"Multiply the number by itself and add 1: 6 × 6 + 1 = 37."}) ],
+  [ Q("Which word uses exactly the same letters as EARTH?", {o:["HEART","THREAT","HEARD","EATEN"], a:0, h:"The same five letters in a new order.", w:"HEART is E, A, R, T and H rearranged."}),
+    Q("Pens cost 3 for £1. How much do 12 pens cost?", {o:["£3","£4","£5","£12"], a:1, h:"How many lots of 3 are there in 12?", w:"12 pens is 4 lots of 3, so £4."}),
+    Q("A drawer holds black socks and white socks, all mixed up. In the dark, how many single socks must you take out to be sure of a matching pair?", {a:["3","three"], num:true, h:"How many colours are there?", w:"With two colours, your first two socks might not match, but the third must match one of them."}) ],
+  [ Q("What number comes next?", {show:"100, 90, 80, 70, ?", o:["50","60","65","75"], a:1, h:"It goes down by the same amount every time.", w:"It goes down by 10 each time."}),
+    Q("What letter comes next?", {show:"B, D, G, K, ?", o:["O","P","Q","N"], a:1, h:"Count the gaps between the letters.", w:"The gaps grow by one each time: +2, +3, +4, then +5. Five letters after K is P."}),
+    Q("Three boxes are labelled APPLES, ORANGES and MIXED, but every label is wrong. You take one fruit from the box labelled MIXED, and it's an apple. What's in the box labelled ORANGES?", {o:["Apples","Oranges","Mixed"], a:2, h:"The MIXED label is wrong, so that box can't really be mixed.", w:"The box labelled MIXED must be all apples. The box labelled ORANGES can't be oranges, and the apples are taken, so it's the mixed box."}) ],
+  [ Q("Which shape has the most sides?", {o:["Hexagon","Octagon","Pentagon","Heptagon"], a:1, h:"Think of an octopus.", w:"An octagon has 8 sides. A heptagon has 7, a hexagon 6 and a pentagon 5."}),
+    Q("A clock gains 2 minutes every hour. It's set to the right time at noon. What time does it show at 6pm?", {o:["6:06","6:12","6:24","5:48"], a:1, h:"How many hours have gone by?", w:"6 hours × 2 minutes = 12 minutes fast, so it shows 6:12."}),
+    Q("What number comes next?", {show:"1, 4, 27, 256, ?", a:["3125"], d:"3,125", num:true, h:"Each number is multiplied by itself a few times.", w:"1 × 1 = 1, 2 × 2 = 4, 3 × 3 × 3 = 27, 4 × 4 × 4 × 4 = 256. Next is 5 multiplied by itself five times: 3,125."}) ],
+  [ Q("How many hours are there in two days?", {a:["48","forty eight"], num:true, h:"There are 24 in one day.", w:"2 × 24 = 48."}),
+    Q("Which number is the odd one out?", {o:["25","36","45","64"], a:2, h:"Can you get each one by multiplying a number by itself?", w:"25, 36 and 64 are 5 × 5, 6 × 6 and 8 × 8. You can't make 45 that way."}),
+    Q("Anna beat Ben in a race. Dev beat Anna. Cara finished just behind Ben. Nobody else ran. Who came second?", {o:["Anna","Ben","Cara","Dev"], a:0, h:"Write the runners down in order, first to last.", w:"The finishing order was Dev, Anna, Ben, Cara."}) ],
+  [ Q("What comes next?", {show:"▲ ● ■ ▲ ● ■ ▲ ?", o:["▲","●","■"], a:1, h:"The pattern repeats every three.", w:"It repeats triangle, circle, square, so a circle comes after the triangle."}),
+    Q("Jack is 10, and his sister is half his age. When Jack is 40, how old will his sister be?", {a:["35","thirty five"], num:true, h:"How many years apart are they?", w:"She's 5 now, so she's 5 years younger. She'll always be 5 years younger: 35."}),
+    Q("Counting up from 1 in British English, what's the first number with the letter A in its name?", {a:["101","one hundred and one"], d:"101 (one hundred and one)", num:true, h:"You won't find it in the first hundred.", w:"One hundred and one. Nothing up to one hundred has an A, but in British English 101 includes the word 'and'."}) ],
+  [ Q("Which of these is a square number?", {o:["15","24","49","50"], a:2, h:"A number multiplied by itself.", w:"7 × 7 = 49."}),
+    Q("Which word can go in front of BREAD, CAKE and NUT?", {o:["SHORT","GINGER","PAN","CUP"], a:1, h:"Think of spicy biscuits.", w:"GINGERBREAD, GINGER CAKE and GINGER NUT."}),
+    Q("How many times a day do the hour and minute hands of a clock point in exactly the same direction?", {a:["22","twenty two"], num:true, h:"It isn't once every hour. Think about 11 to 1.", w:"They meet 11 times every 12 hours, not 12, because between 11 and 1 they only meet once, at 12. That's 22 times a day."}) ],
+  [ Q("What comes next?", {show:"AB, CD, EF, ?", o:["FG","GH","HI","GI"], a:1, h:"Pairs of letters, in order.", w:"It's the alphabet in pairs, so GH comes next."}),
+    Q("You have 12 sweets. You eat a third of them, then give half of what's left to a friend. How many do you have now?", {a:["4","four"], num:true, h:"Take it one step at a time.", w:"A third of 12 is 4, which leaves 8. Half of 8 is 4."}),
+    Q("This pattern carries on forever. What's the 100th letter?", {show:"A B C D A B C D A B C D …", o:["A","B","C","D"], a:3, h:"Every 4 letters, it starts again.", w:"100 divides exactly by 4, so the 100th letter is the last in a group of four: D."}) ],
+  [ Q("Which number has as many letters as the number itself?", {o:["THREE","FOUR","FIVE","SIX"], a:1, h:"Count the letters in each one.", w:"FOUR has four letters."}),
+    Q("What number comes next?", {show:"3, 9, 27, 81, ?", a:["243"], num:true, h:"Multiply.", w:"Each number is 3 times the last: 81 × 3 = 243."}),
+    Q("Lucy says: \"The day before yesterday I was 9, but next year I'll turn 12.\" What's today's date?", {o:["31 December","1 January","29 February","2 January"], a:1, h:"Her birthday is very close to New Year.", w:"Her birthday is 31 December. On 30 December she was 9, and she turned 10 yesterday. She turns 11 at the end of this year and 12 at the end of next year."}) ],
+  [ Q("How many seconds are there in 3 minutes?", {a:["180"], num:true, h:"There are 60 in one minute.", w:"3 × 60 = 180."}),
+    Q("Which number is the odd one out?", {o:["7","15","31","64"], a:3, h:"Try doubling each one and adding 1.", w:"7 doubled plus 1 is 15, and 15 doubled plus 1 is 31. 64 doesn't fit, and it's the only even number too."}),
+    Q("Four friends share a £60 bill. Three of them pay the same amount, and the fourth pays £6 more than each of the others. How much does the fourth friend pay, in pounds?", {a:["19.50"], d:"£19.50", num:true, h:"Take the extra £6 off first, then split what's left.", w:"£60 − £6 = £54, and £54 split four ways is £13.50 each. The fourth friend pays £13.50 + £6 = £19.50."}) ],
+  [ Q("What day is three days after Friday?", {o:["Sunday","Monday","Tuesday","Thursday"], a:1, h:"Count on: Saturday…", w:"Saturday, Sunday, Monday."}),
+    Q("If A = 1, B = 2, C = 3 and so on, what do the letters of DOG add up to?", {a:["26","twenty six"], num:true, h:"D is 4. O is the 15th letter.", w:"D (4) + O (15) + G (7) = 26."}),
+    Q("The numbers 1 to 9 have been put in a special order. What comes next?", {show:"8, 5, 4, 9, 1, 7, 6, ?", a:["3","three"], num:true, h:"Write them out as words.", w:"They're in alphabetical order: eight, five, four, nine, one, seven, six, three, two."}) ],
+  [ Q("What is 10 + 10 × 0?", {a:["10","ten"], num:true, h:"Multiplying comes before adding.", w:"10 × 0 = 0 first, then 10 + 0 = 10."}),
+    Q("What letter comes next?", {show:"M, V, E, M, J, S, U, ?", o:["N","P","S","O"], a:0, h:"Look up at the night sky.", w:"The planets, going out from the Sun: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune."}),
+    Q("If a hen and a half lays an egg and a half in a day and a half, how many eggs does one hen lay in 3 days?", {a:["2","two"], num:true, h:"Work out how long one hen takes to lay one egg.", w:"1.5 hens lay 1.5 eggs in 1.5 days, so 1 hen lays 1 egg in 1.5 days. In 3 days, that's 2 eggs."}) ],
+  [ Q("How many quarters are there in two and a half?", {a:["10","ten"], num:true, h:"How many quarters are in one?", w:"4 in each whole one, plus 2 in the half: 4 + 4 + 2 = 10."}),
+    Q("Lee faces north. He turns right 90°, then turns all the way round, then turns left 90°. Which way is he facing now?", {o:["North","East","South","West"], a:2, h:"Take it one turn at a time.", w:"Turning right takes him to east. Turning all the way round takes him to west. Then left from west is south."}),
+    Q("Use each of the digits 1, 2, 3 and 4 once to make two 2-digit numbers. What's the biggest answer you can get by multiplying them together?", {a:["1312"], d:"1,312", num:true, h:"The two biggest digits should both go at the front.", w:"41 × 32 = 1,312. It just beats 42 × 31 = 1,302."}) ],
+  [ Q("Which is the odd one out?", {o:["SPRING","SUMMER","AUGUST","WINTER"], a:2, h:"Three of them are seasons.", w:"AUGUST is a month. The others are seasons."}),
+    Q("A train 1 km long travels at 1 km a minute through a tunnel 1 km long. How many minutes from the front going in to the back coming out?", {a:["2","two"], num:true, h:"The back of the train has further to go than the front.", w:"By the time the back comes out, the front has travelled 2 km: the tunnel plus the train's own length. That takes 2 minutes."}),
+    Q("I'm a 3-digit number. My digits add up to 9. My first digit is double my last, and my middle digit is 1 more than my last. What number am I?", {a:["432"], num:true, h:"Try small numbers for the last digit.", w:"Last digit 2, first digit 4, middle digit 3: 432. And 4 + 3 + 2 = 9."}) ],
+  [ Q("How many letter Fs are there in FIFTY FEISTY FERRETS?", {a:["4","four"], num:true, h:"Check the middle of the first word.", w:"FIFTY has two Fs, and FEISTY and FERRETS have one each: 4."}),
+    Q("A rope ladder hangs over the side of a boat, with 4 rungs above the water. The tide rises by 1 metre. How many rungs are above the water now?", {o:["2","4","6"], a:1, h:"What happens to the boat when the tide comes in?", w:"The boat floats up with the tide, and the ladder goes up with it. Still 4."}),
+    Q("How many squares are there on a chessboard, counting squares of every size?", {a:["204"], num:true, h:"It's far more than 64. Add up the 8 × 8 squares, the 7 × 7 squares…", w:"64 + 49 + 36 + 25 + 16 + 9 + 4 + 1 = 204."}) ],
+  [ Q("What letter comes next?", {show:"A, E, I, O, ?", o:["P","U","Y","V"], a:1, h:"These letters are special.", w:"They're the vowels: A, E, I, O, U."}),
+    Q("You have 3 apples and you take away 2. How many do you have?", {a:["2","two"], num:true, h:"Who's holding what?", w:"You took 2, so you've got 2."}),
+    Q("Max has twice as many sisters as brothers. His sister Pia has the same number of sisters as brothers. How many children are in the family?", {a:["7","seven"], num:true, h:"Max doesn't count himself, and Pia doesn't count herself.", w:"4 girls and 3 boys. Max has 4 sisters and 2 brothers. Pia has 3 sisters and 3 brothers."}) ],
+];
+const ROUNDS = ['ROUND 1', 'ROUND 2', 'THE FINAL'];
+
+/* ================= Helpers ================= */
+const $ = id => document.getElementById(id);
+const pick = a => a[Math.random() * a.length | 0];
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+
+function londonNow() {
+  const o = {};
+  new Intl.DateTimeFormat('en-GB', {timeZone:'Europe/London', year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23'})
+    .formatToParts(new Date(Date.now() - RESET_HOUR * 3600e3)).forEach(p => o[p.type] = p.value);
+  return o;
+}
+function dayNumber() {
+  const o = londonNow(), [y, m, d] = LAUNCH.split('-').map(Number);
+  return Math.max(1, Math.round((Date.UTC(+o.year, +o.month - 1, +o.day) - Date.UTC(y, m - 1, d)) / 864e5) + 1);
+}
+function secondsToNext() { const o = londonNow(); return 86400 - (+o.hour * 3600 + +o.minute * 60 + +o.second); }
+const hms = s => [s / 3600 | 0, (s % 3600) / 60 | 0, s % 60].map(n => String(n).padStart(2, '0')).join(':');
+const mmss = s => `${s / 60 | 0}:${String(s % 60).padStart(2, '0')}`;
+const money = p => `£${p}`;
+
+/* Typed answers: numbers are compared as numbers ("£19.50" = "19.5", "3,125" = "3125", "day 19" = "19").
+   Words ignore case, punctuation and "it's/the/a…" at the start, and allow a small typo on longer words. */
+function norm(s) {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+    .replace(/&/g, ' and ').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+const LEAD = /^(it s|its|it is|the answer is|answer|i think|is it|they re|you have|you ve got|i have|a|an|the|about|day|number)\s+/;
+function strip(s) { let p; do { p = s; s = s.replace(LEAD, ''); } while (s !== p); return s; }
+const clean = s => strip(norm(s));
+function numOf(s) {
+  s = String(s).toLowerCase().trim().replace(/^(it['’]?s|it is|the answer is|i think it['’]?s|i think|is it|answer|you have|you['’]ve got|i have)\s*/, '')
+    .replace(/½/g, '.5').replace(/[£,\s°]/g, '')
+    .replace(/^(day|about|the|answer|number)/, '')
+    .replace(/(pence|p|minutes?|mins?|degrees?|deg|days?|eggs?|coins?|squares?|handshakes?|seconds?|secs?|hours?|hrs?|legs?|sides?|yearsold|years?|rungs?|children|kids|times|letters?|sheep|corners|sweets|months?|pounds?|quid|apples?)$/, '');
+  return /^\d+(\.\d+)?$/.test(s) ? parseFloat(s) : NaN;
+}
+function lev(a, b) {
+  const d = Array.from({length: a.length + 1}, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) {
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+  }
+  return d[a.length][b.length];
+}
+function isRight(guess, q) {
+  const g = clean(guess), gn = numOf(guess);
+  if (!g) return false;
+  return q.a.some(ans => {
+    const an = numOf(ans);
+    if (!isNaN(an)) return !isNaN(gn) && Math.abs(an - gn) < 1e-9;
+    const a = clean(ans);
+    if (g === a || g.replace(/ /g, '') === a.replace(/ /g, '')) return true;
+    return a.length >= 7 && lev(g, a) <= (a.length >= 12 ? 2 : 1);
+  });
+}
+const answerText = q => q.o ? q.o[q.a] : (q.d || q.a[0]);
+
+/* ================= State ================= */
+const DAY = dayNumber(), TODAY = DAYS[(DAY - 1) % DAYS.length];
+const KEY = 'quidsin-state', SKEY = 'quidsin-stats';
+const fresh = () => ({day: DAY, idx: 0, lives: LIVES, stage: 'ready', startAt: 0, hint: false, tries: [], wrong: [], results: [], out: false});
+let S = (() => { const s = store.get(KEY, null); return s && s.day === DAY ? s : fresh(); })();
+const save = () => store.set(KEY, S);
+const blankStats = () => ({played: 0, streak: 0, best: 0, lastDay: 0, top: 0, dist: [0, 0, 0, 0]});
+let stats = Object.assign(blankStats(), store.get(SKEY, {}));
+const streakNow = () => stats.lastDay >= DAY - 1 ? stats.streak : 0;
+const isWin = r => r && (r.k === 'clean' || r.k === 'helped');
+const solvedCount = () => S.results.filter(isWin).length;
+const banked = () => S.results.reduce((t, r) => t + (isWin(r) ? r.t : 0), 0);
+
+const RIGHT = ["Quids in!", "Ding ding ding!", "Spot on!", "Take a bow!", "Correct!"];
+const WRONG = ["Ooh, so close.", "Not this time.", "The audience winces.", "That's not it."];
+
+/* ================= Sound effects =================
+   All made in the browser with Web Audio, so there are no sound files to host.
+   The speaker button turns them off, and the choice is remembered. */
+const SFX = (() => {
+  let ctx = null, out = null, noiseBuf = null, on = store.get('quidsin-sound', true);
+  function ac() {
+    if (!on) return null;
+    try {
+      if (!ctx) {
+        const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+        ctx = new C(); out = ctx.createGain(); out.gain.value = .8; out.connect(ctx.destination);
+      }
+      if (ctx.state === 'suspended') ctx.resume();
+      return ctx;
+    } catch (e) { return null; }
+  }
+  function env(g, t, vol, attack, dur) {
+    g.gain.setValueAtTime(.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + attack);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+  }
+  function tone(f, t, dur, {type = 'sine', vol = .2, attack = .008, to = 0, lp = 0, vib = 0} = {}) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
+    let node = o;
+    if (lp) { const fl = ctx.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = lp; o.connect(fl); node = fl; }
+    if (vib) { const l = ctx.createOscillator(), lg = ctx.createGain(); l.frequency.value = 6; lg.gain.value = vib; l.connect(lg); lg.connect(o.frequency); l.start(t); l.stop(t + dur + .05); }
+    env(g, t, vol, attack, dur); node.connect(g); g.connect(out); o.start(t); o.stop(t + dur + .05);
+  }
+  function noise(t, dur, {vol = .12, f = 1000, to = 0, q = .8, type = 'bandpass', attack = .02} = {}) {
+    if (!noiseBuf) {
+      noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+      const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    const src = ctx.createBufferSource(), fl = ctx.createBiquadFilter(), g = ctx.createGain();
+    src.buffer = noiseBuf; src.loop = true; fl.type = type; fl.Q.value = q; fl.frequency.setValueAtTime(f, t);
+    if (to) fl.frequency.exponentialRampToValueAtTime(to, t + dur);
+    env(g, t, vol, attack, dur); src.connect(fl); fl.connect(g); g.connect(out); src.start(t, Math.random()); src.stop(t + dur + .05);
+  }
+  // a short burst of studio applause: lots of tiny claps
+  function applause(t, dur, vol = .05) {
+    noise(t, dur, {vol: vol * .6, f: 2200, q: .4, attack: .15});
+    for (let i = 0; i < dur * 70; i++) noise(t + Math.random() * dur * .9, .025 + Math.random() * .02, {vol: vol * (.5 + Math.random()), f: 1200 + Math.random() * 2400, q: 1.2, attack: .003});
+  }
+  // brassy fanfare note
+  const brass = (f, t, dur, vol = .09) => { tone(f, t, dur, {type: 'sawtooth', vol, attack: .03, lp: 2200}); tone(f * 2, t, dur * .8, {type: 'square', vol: vol * .15, attack: .03, lp: 2600}); };
+  const ching = (t, vol = .1) => { tone(2093, t, .5, {type: 'triangle', vol}); tone(2637, t + .06, .6, {type: 'triangle', vol: vol * .8}); tone(4186, t + .06, .35, {vol: vol * .25}); };
+  const play = fn => { const c = ac(); if (c) { try { fn(c.currentTime + .02); } catch (e) {} } };
+  return {
+    get on() { return on; },
+    unlock() { ac(); },
+    toggle() { on = !on; store.set('quidsin-sound', on); if (on) play(t => ching(t, .08)); return on; },
+    // question sting: a quick brass rise and a drum hit; bigger for The Final
+    sting: final => play(t => {
+      const notes = final ? [392, 523.25, 659.25, 783.99] : [523.25, 659.25, 783.99];
+      notes.forEach((f, i) => brass(f, t + i * .09, .22, .07));
+      brass(notes[notes.length - 1] * (final ? 1 : 1), t + notes.length * .09, .5, .08);
+      tone(110, t + notes.length * .09, .25, {type: 'triangle', vol: .3, to: 55}); noise(t + notes.length * .09, .18, {vol: .12, f: 400, type: 'lowpass'});
+    }),
+    // ticking for the last 10 seconds, sharper for the last 5
+    tick: s => play(t => { const hi = s <= 5; tone(s % 2 ? 1250 : 980, t, .06, {type: 'triangle', vol: hi ? .16 : .09, attack: .002}); noise(t, .03, {vol: hi ? .07 : .04, f: 3000, q: 3, attack: .002}); }),
+    hintReady: () => play(t => { tone(1046.5, t, .25, {vol: .06}); tone(1318.5, t + .1, .35, {vol: .06}); }),
+    nudge: () => play(t => { tone(330, t, .28, {type: 'triangle', vol: .12, to: 660}); tone(880, t + .2, .3, {vol: .06}); }),
+    // the buzzer, with a clunk as the button goes down
+    wrong: () => play(t => {
+      tone(146, t, .42, {type: 'square', vol: .09, lp: 1400}); tone(155, t, .42, {type: 'square', vol: .09, lp: 1400});
+      tone(90, t, .12, {type: 'triangle', vol: .25, to: 50}); noise(t, .06, {vol: .1, f: 500, type: 'lowpass', attack: .002});
+    }),
+    // ka-ching! and a ripple of applause
+    right: () => play(t => { ching(t); [783.99, 1046.5].forEach((f, i) => brass(f, t + .1 + i * .1, .3, .05)); applause(t + .15, 1.3, .045); }),
+    timeUp: () => play(t => { [0, .32].forEach(d => { tone(130, t + d, .26, {type: 'square', vol: .1, lp: 1200}); tone(138, t + d, .26, {type: 'square', vol: .1, lp: 1200}); }); }),
+    // the sad trombone
+    out: () => play(t => {
+      [[392, .32], [370, .32], [349.2, .32], [329.6, .9]].forEach(([f, d], i) =>
+        tone(f / 2, t + i * .36, d, {type: 'sawtooth', vol: .1, attack: .04, lp: 900, to: i === 3 ? 300 / 2 : 0, vib: i === 3 ? 6 : 0}));
+    }),
+    finale: n => play(t => {
+      if (n === 3) {
+        [[523.25, 0], [523.25, .14], [523.25, .28], [659.25, .42], [783.99, .62], [1046.5, .82]].forEach(([f, d], i) => brass(f, t + d, i === 5 ? 1.1 : .16, .08));
+        ching(t + .82); applause(t + .6, 2.6, .06);
+      } else if (n > 0) { [523.25, 659.25, 783.99].forEach((f, i) => brass(f, t + i * .13, i === 2 ? .7 : .16, .07)); applause(t + .3, 1.6, .045); }
+      else { [[392, .32], [370, .32], [349.2, .32], [329.6, .9]].forEach(([f, d], i) => tone(f / 2, t + i * .36, d, {type: 'sawtooth', vol: .1, attack: .04, lp: 900, vib: i === 3 ? 6 : 0})); }
+    })
+  };
+})();
+
+/* ================= Clock + lights ================= */
+function remaining() {
+  if (S.stage !== 'play') return SECS;
+  return Math.max(0, Math.min(SECS, SECS - (Date.now() - S.startAt) / 1000));
+}
+function paintBulbs(r, urgent) {
+  const lit = Math.ceil(r / (SECS / BULBS));
+  const b = $('bulbs');
+  if (!b.children.length) b.innerHTML = '<span class="bulb"></span>'.repeat(BULBS);
+  [...b.children].forEach((el, i) => el.classList.toggle('on', i < lit));
+  b.classList.toggle('urgent', !!urgent);
+}
+let lastSec = -1;
+function paintClock(r, force) {
+  const s = Math.ceil(r), playing = S.stage === 'play', running = playing && Date.now() >= S.startAt && r > 0;
+  paintBulbs(r, playing && s <= 10);
+  if (s === lastSec && !force) return;
+  const counting = !force && lastSec > s && running;
+  lastSec = s;
+  if (counting && s <= 10 && s > 0) SFX.tick(s);
+  if (counting && s === HINT_AT && !S.hint) SFX.hintReady();
+  const c = $('clock');
+  c.textContent = mmss(s);
+  c.className = 'clock led' + (playing ? (s <= 10 ? ' urgent' : s <= 20 ? ' warn' : '') : '');
+  const hb = $('hintBtn');
+  if (playing && !S.hint) {
+    hb.hidden = false;
+    const open = s <= HINT_AT;
+    hb.disabled = !open;
+    hb.textContent = open ? 'Ask the host for a nudge' : `Nudge unlocks at ${mmss(HINT_AT)}`;
+  } else hb.hidden = true;
+}
+let raf = 0;
+function loop() {
+  cancelAnimationFrame(raf);
+  const step = () => {
+    if (S.stage !== 'play') return;
+    const r = remaining();
+    paintClock(r);
+    if (r <= 0) { timeUp(); return; }
+    raf = requestAnimationFrame(step);
+  };
+  step();
+}
+
+/* ================= Rendering ================= */
+function say(t, type) { const m = $('msg'); m.textContent = t; m.className = 'msg' + (type ? ' ' + type : ''); }
+function toast(t) { const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 1800); }
+const BUZZER = '<svg viewBox="0 0 30 28" aria-hidden="true"><rect x="2" y="19" width="26" height="8" rx="2.5" fill="#2b1452" stroke="#f7c948" stroke-opacity=".6"/><g class="dome"><ellipse cx="15" cy="19" rx="10" ry="3" fill="#8c0f2e"/><path d="M5 19a10 10 0 0 1 20 0z" fill="url(#buzzRed)"/><ellipse class="shine" cx="11.5" cy="12.5" rx="3" ry="1.8" fill="#fff" opacity=".55" transform="rotate(-25 11.5 12.5)"/></g></svg>';
+let lastLives = S.lives, lastBank = -1;
+
+function renderStatus() {
+  $('kicker').textContent = 'EPISODE ' + DAY;
+  $('lives').innerHTML = Array.from({length: LIVES}, (_, i) =>
+    `<span class="buzz${i >= S.lives ? ' out' : ''}${i >= S.lives && i < lastLives ? ' fresh' : ''}">${BUZZER}</span>`).join('');
+  $('lives').setAttribute('aria-label', `${S.lives} ${S.lives === 1 ? 'buzzer' : 'buzzers'} left`);
+  lastLives = S.lives;
+  $('pips').innerHTML = Array.from({length: PER_DAY}, (_, i) => {
+    const r = S.results[i];
+    return `<span class="pip ${r ? r.k : i === S.idx && S.stage !== 'done' ? 'cur' : ''}"></span>`;
+  }).join('');
+  const b = banked();
+  $('bank').textContent = money(b);
+  if (lastBank >= 0 && b > lastBank) { const el = $('bank'); el.classList.remove('ping'); void el.offsetWidth; el.classList.add('ping'); }
+  lastBank = b;
+}
+
+function render(opts = {}) {
+  renderStatus();
+  if (S.stage === 'done') { $('play').hidden = true; showResult(); return; }
+  $('play').hidden = false; $('result').hidden = true;
+  const q = TODAY[S.idx];
+  $('round').textContent = ROUNDS[S.idx];
+
+  let body = '';
+  if (S.stage === 'ready') {
+    body = `<p class="intro">Good evening, and welcome to <b>Quids In</b>! Three logic questions, <b>60 seconds</b> each, and <b>three buzzers</b> on your podium.</p>
+            <p class="intro" style="margin-top:10px">Every second you've got left when you answer is <b>£1 in the bank</b>. Ready?</p>`;
+  } else {
+    body = `<p class="qtext" id="qtext">${opts.typing ? '' : esc(q.q)}</p>`;
+    if (q.show) body += `<div class="show led" id="show"${opts.typing ? ' style="visibility:hidden"' : ''}>${esc(q.show)}</div>`;
+    if (S.hint) body += `<div class="host"><b>The host leans in:</b> ${esc(q.h)}</div>`;
+    if (S.stage === 'between') {
+      const res = S.results[S.idx], won = isWin(res);
+      const txt = answerText(q);
+      body += `<div class="reveal"><span class="lab">${won ? 'SPOT ON' : 'THE ANSWER WAS'}</span><b class="word${won ? '' : ' lost'}">${esc(txt)}</b>
+        <p class="why"><b>Here's why:</b> ${esc(q.w)}</p></div>`;
+    }
+  }
+  $('cardBody').innerHTML = body;
+
+  // answers
+  const showOpts = !!q.o && S.stage === 'play';
+  $('opts').hidden = !showOpts;
+  if (showOpts) {
+    const short = q.o.every(o => o.length <= 9);
+    $('opts').className = 'opts' + (short && q.o.length === 4 ? ' two' : '');
+    $('opts').innerHTML = q.o.map((o, i) => {
+      const no = S.wrong.includes(i), yes = S.stage === 'between' && i === q.a;
+      const dis = S.stage !== 'play' || no;
+      return `<button class="opt${no ? ' no' : ''}${yes ? ' yes' : ''}" data-i="${i}"${dis ? ' disabled' : ''}><i>${'ABCD'[i]}</i><span>${esc(o)}</span></button>`;
+    }).join('');
+  }
+  $('form').hidden = !(S.stage === 'play' && !q.o);
+  if (!q.o) $('guess').setAttribute('inputmode', q.num ? 'decimal' : 'text');
+  $('tries').innerHTML = S.stage === 'play' && !q.o ? S.tries.map(t => `<span>${esc(t)}</span>`).join('') : '';
+
+  const go = $('goBtn');
+  if (S.stage === 'ready') { go.hidden = false; go.textContent = 'Start the show'; }
+  else if (S.stage === 'between') { go.hidden = false; go.textContent = S.results.length >= PER_DAY ? "See tonight's results" : S.idx + 1 === PER_DAY - 1 ? 'On to The Final' : 'Next question'; }
+  else go.hidden = true;
+
+  if (S.stage === 'ready') { lastSec = -1; paintClock(SECS, true); $('hintBtn').hidden = true; }
+  else if (S.stage === 'between') { const t = (S.results[S.idx] || {}).t || 0; lastSec = -1; paintClock(t, true); }
+  else { lastSec = -1; paintClock(remaining(), true); loop(); }
+}
+
+/* ================= Game flow ================= */
+let typeTimer = 0;
+function typewrite(el, text, ms, done) {
+  clearInterval(typeTimer);
+  if (reduceMotion || !ms) { el.textContent = text; done && done(); return; }
+  let i = 0;
+  const step = Math.max(1, Math.round(text.length / (ms / 16)));
+  typeTimer = setInterval(() => {
+    i = Math.min(text.length, i + step);
+    el.innerHTML = esc(text.slice(0, i)) + (i < text.length ? '<span class="caret"></span>' : '');
+    if (i >= text.length) { clearInterval(typeTimer); done && done(); }
+  }, 16);
+}
+
+function startQuestion() {
+  const q = TODAY[S.idx];
+  const typeMs = reduceMotion ? 0 : Math.min(2200, q.q.length * 13);
+  S.stage = 'play'; S.hint = false; S.tries = []; S.wrong = [];
+  S.startAt = Date.now() + typeMs + (reduceMotion ? 0 : 350);
+  save(); say('');
+  SFX.sting(S.idx === PER_DAY - 1);
+  render({typing: true});
+  if (!q.o) { $('guess').value = ''; $('guess').focus({preventScroll: true}); }
+  typewrite($('qtext'), q.q, typeMs, () => { const sh = $('show'); if (sh) sh.style.visibility = ''; });
+}
+
+function resolve(result, msg, type) {
+  clearInterval(typeTimer);
+  S.results.push(result);
+  if (S.out) while (S.results.length < PER_DAY) S.results.push({k: 'skipped', t: 0});
+  S.stage = 'between'; save();
+  render();
+  say(msg, type);
+  $('goBtn').focus({preventScroll: true});
+  setTimeout(() => $('goBtn').scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest'}), 150);
+}
+
+function correct(left) {
+  const t = Math.ceil(left);
+  SFX.right(); dropCoin(); confetti(60);
+  resolve({k: S.tries.length || S.wrong.length || S.hint ? 'helped' : 'clean', t}, `${pick(RIGHT)} +£${t} in the bank.`, 'good');
+}
+function wrong() {
+  S.lives--;
+  if (S.lives <= 0) { S.out = true; SFX.out(); resolve({k: 'missed', t: 0}, "That was your last buzzer. It's curtains!", 'bad'); return true; }
+  SFX.wrong();
+  const p = $('podium'); p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake');
+  say(`${pick(WRONG)} ${S.lives} ${S.lives === 1 ? 'buzzer' : 'buzzers'} left.`, 'bad');
+  return false;
+}
+
+function onPick(i) {
+  if (S.stage !== 'play') return;
+  const q = TODAY[S.idx], left = remaining();
+  if (left <= 0) { timeUp(); return; }
+  if (S.wrong.includes(i)) return;
+  if (i === q.a) { correct(left); return; }
+  S.wrong.push(i); save();
+  if (wrong()) return;
+  save(); renderStatus();
+  const b = $('opts').querySelector(`[data-i="${i}"]`);
+  if (b) { b.classList.add('no'); b.disabled = true; }
+}
+
+function onGuess(e) {
+  if (e) e.preventDefault();
+  if (S.stage !== 'play') return;
+  const q = TODAY[S.idx];
+  const inp = $('guess'), v = inp.value.trim();
+  if (!v) { say('Type an answer first.', 'bad'); return; }
+  const left = remaining();
+  if (left <= 0) { timeUp(); return; }
+  if (S.tries.some(t => clean(t) === clean(v))) { say("You've already tried that one.", 'bad'); inp.select(); return; }
+  inp.value = '';
+  if (isRight(v, q)) { correct(left); return; }
+  S.tries.push(v); save();
+  if (wrong()) return;
+  save(); renderStatus();
+  $('tries').innerHTML = S.tries.map(t => `<span>${esc(t)}</span>`).join('');
+  inp.focus({preventScroll: true});
+}
+
+function timeUp() {
+  if (S.stage !== 'play') return;
+  SFX.timeUp();
+  resolve({k: 'missed', t: 0}, "Time's up!", 'bad');
+}
+
+function useHint() {
+  if (S.stage !== 'play' || S.hint || remaining() > HINT_AT) return;
+  S.hint = true; save(); SFX.nudge();
+  const h = document.createElement('div'); h.className = 'host';
+  h.innerHTML = `<b>The host leans in:</b> ${esc(TODAY[S.idx].h)}`;
+  $('cardBody').appendChild(h);
+  $('hintBtn').hidden = true;
+  if (!TODAY[S.idx].o) $('guess').focus({preventScroll: true});
+}
+
+function next() {
+  if (S.stage === 'ready') { startQuestion(); return; }
+  if (S.stage !== 'between') return;
+  if (S.results.length >= PER_DAY) { finish(); return; }
+  S.idx++; startQuestion();
+}
+
+function finish() {
+  S.stage = 'done'; save(); record(); render(); SFX.finale(solvedCount());
+  if (solvedCount()) confetti(solvedCount() === 3 ? 220 : 90);
+  $('result').scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block: 'start'});
+}
+
+function record() {
+  if (stats.lastDay === DAY) return;
+  stats.played++;
+  stats.streak = stats.lastDay === DAY - 1 ? stats.streak + 1 : 1;   // a missed day breaks the streak
+  stats.best = Math.max(stats.best, stats.streak);
+  stats.lastDay = DAY;
+  stats.dist[solvedCount()]++;
+  stats.top = Math.max(stats.top, banked());
+  store.set(SKEY, stats);
+}
+
+/* ================= Coin drop + confetti ================= */
+function dropCoin() {
+  if (reduceMotion) return;
+  const c = $('coinG'), g = $('slotGlow');
+  c.classList.remove('drop'); g.classList.remove('on'); void c.getBoundingClientRect();
+  c.classList.add('drop'); g.classList.add('on');
+  setTimeout(() => { c.classList.remove('drop'); g.classList.remove('on'); }, 1700);
+}
+function confetti(n) {
+  if (reduceMotion) return;
+  const cv = $('confetti'), x = cv.getContext('2d'), W = cv.width = innerWidth, H = cv.height = innerHeight;
+  const cols = ['#f7c948', '#ff3d8b', '#3be3ff', '#a855f7', '#ffffff'];
+  const ps = Array.from({length: n}, () => ({x: W / 2 + (Math.random() - .5) * W * .5, y: -20 - Math.random() * H * .3,
+    vx: (Math.random() - .5) * 5, vy: 2 + Math.random() * 4, r: Math.random() * 6, s: (Math.random() - .5) * .3,
+    w: 6 + Math.random() * 6, h: 8 + Math.random() * 8, c: pick(cols), coin: Math.random() < .18}));
+  const t0 = performance.now();
+  cancelAnimationFrame(confetti.raf);
+  (function step(now) {
+    x.clearRect(0, 0, W, H);
+    let alive = 0;
+    ps.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += .06; p.r += p.s;
+      if (p.y < H + 30) alive++;
+      x.save(); x.translate(p.x, p.y); x.rotate(p.r);
+      if (p.coin) { x.scale(Math.abs(Math.cos(p.r * 2)) + .2, 1); x.fillStyle = '#f7c948'; x.beginPath(); x.arc(0, 0, 7, 0, 7); x.fill(); x.strokeStyle = '#b9821c'; x.lineWidth = 1.5; x.stroke(); }
+      else { x.fillStyle = p.c; x.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r))); }
+      x.restore();
+    });
+    if (alive && now - t0 < 6000) confetti.raf = requestAnimationFrame(step); else x.clearRect(0, 0, W, H);
+  })(t0);
+}
+
+/* ================= Results ================= */
+function verdict() {
+  const n = solvedCount();
+  if (n === 3) return S.results.every(r => r.k === 'clean') ? 'Flawless!' : 'What a show!';
+  if (n === 2) return 'Not bad at all';
+  if (n === 1) return 'A close call';
+  return S.out ? 'Skint!' : 'Better luck next episode';
+}
+function showResult() {
+  const n = solvedCount(), b = banked(), st = streakNow();
+  paintBulbs(0);
+  $('result').hidden = false;
+  $('result').innerHTML = `
+    <div class="lab">THAT'S THE SHOW · EPISODE ${DAY}</div>
+    <h2 class="verdict">${verdict()}</h2>
+    <div class="banked led">BANKED ${money(b)}</div>
+    <p class="solved">${n} of ${PER_DAY} answered correctly</p>
+    <div class="squares">${S.results.map(r => `<span class="sq ${r.k}"></span>`).join('')}</div>
+    <p class="streak">DAY STREAK: ${st}</p>
+    <div class="btns"><button class="btn" id="shareImg">Share image</button><button class="btn ghost" id="copyBtn">Copy result</button></div>
+    <p class="next">NEXT EPISODE IN <b id="countdown">--:--:--</b></p>
+    <ol class="recap">${TODAY.map((q, i) => {
+      const res = S.results[i] || {k: 'skipped', t: 0};
+      const label = isWin(res) ? `+£${res.t}` : res.k === 'missed' ? 'missed' : 'not reached';
+      return `<li><span class="sq ${res.k}"></span><div><div class="rr">${ROUNDS[i]}</div><p class="rq">${esc(q.q)}${q.show ? ' ' + esc(q.show.replace(/\n/g, ' · ')) : ''}</p>
+        <p class="ra">${esc(answerText(q))}<small>${label}</small></p><p class="rw">${esc(q.w)}</p></div></li>`;
+    }).join('')}</ol>`;
+  $('shareImg').onclick = shareImage;
+  $('copyBtn').onclick = copyResult;
+  tick();
+}
+
+const EMOJI = {clean: '🟩', helped: '🟨', missed: '🟥', skipped: '⬛'};
+function shareText() {
+  const n = solvedCount(), st = streakNow();
+  return `💷 Quids In #${DAY} ${n}/${PER_DAY}\n${S.results.map(r => EMOJI[r.k]).join('')}\n💰 Banked ${money(banked())}` +
+    (st > 1 ? `\n🔥 ${st} day streak` : '') + `\n${SITE_URL}`;
+}
+async function copyResult() {
+  const t = shareText();
+  try { await navigator.clipboard.writeText(t); }
+  catch (e) { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  toast('Copied. Paste it in the group chat');
+}
+
+function renderStats() {
+  const s = stats;
+  $('statsGrid').innerHTML = [['Played', s.played], ['Day streak', streakNow()], ['Best streak', s.best], ['Top prize', money(s.top)]]
+    .map(([l, v]) => `<div><b>${v}</b><span>${l}</span></div>`).join('');
+  const mx = Math.max(1, ...s.dist), today = S.stage === 'done' ? solvedCount() : -1;
+  $('dist').innerHTML = s.dist.map((v, i) => `<div class="bar"><span>${i}</span><i class="${i === today ? 'hl' : ''}" style="width:${Math.max(8, v / mx * 90)}%">${v}</i></div>`).join('');
+}
+function tick() {
+  const s = secondsToNext();
+  const a = $('countdown'), b = $('statsCountdown');
+  if (a) a.textContent = hms(s);
+  if (b) b.textContent = hms(s);
+  if (s <= 1) setTimeout(() => location.reload(), 1500);
+}
+
+/* ================= Canvas drawing (share image + og-image) ================= */
+async function fontsReady() {
+  try { await Promise.all(["400 100px 'DM Serif Display'", "italic 400 50px 'DM Serif Display'", "400 30px 'DotGothic16'", "700 30px 'DM Sans'"].map(f => document.fonts.load(f))); } catch (e) {}
+}
+function rrect(x, a, b, w, h, r) {
+  x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r);
+  x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath();
+}
+function bgStage(x, W, H) {
+  x.fillStyle = '#160a2a'; x.fillRect(0, 0, W, H);
+  let g = x.createRadialGradient(W / 2, -H * .1, 0, W / 2, -H * .1, H * .75);
+  g.addColorStop(0, 'rgba(168,85,247,.45)'); g.addColorStop(1, 'rgba(168,85,247,0)'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  g = x.createRadialGradient(W / 2, H * 1.05, 0, W / 2, H * 1.05, H * .55);
+  g.addColorStop(0, 'rgba(255,61,139,.32)'); g.addColorStop(1, 'rgba(255,61,139,0)'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  // two spotlight beams
+  [[W * .12, -.42, 'rgba(255,240,200,'], [W * .88, .42, 'rgba(59,227,255,']].forEach(([sx, rot, col]) => {
+    x.save(); x.translate(sx, -H * .05); x.rotate(rot);
+    const bg = x.createLinearGradient(0, 0, 0, H * 1.1); bg.addColorStop(0, col + '.13)'); bg.addColorStop(1, col + '0)');
+    x.fillStyle = bg; x.beginPath(); x.moveTo(-W * .02, 0); x.lineTo(W * .02, 0); x.lineTo(W * .28, H * 1.1); x.lineTo(-W * .28, H * 1.1); x.closePath(); x.fill();
+    x.restore();
+  });
+}
+function frameLine(x, X, Y, W, H) {
+  x.strokeStyle = 'rgba(247,201,72,.6)'; x.lineWidth = 3; rrect(x, X, Y, W, H, 32); x.stroke();
+  x.strokeStyle = 'rgba(247,201,72,.2)'; x.lineWidth = 1.5; rrect(x, X + 14, Y + 14, W - 28, H - 28, 22); x.stroke();
+}
+function coinDraw(x, cx, cy, r, alpha) {
+  x.save(); x.globalAlpha = alpha || 1;
+  const poly = (px, py, pr) => { x.beginPath(); for (let i = 0; i < 12; i++) { const a = (i * 30 - 75) * Math.PI / 180; x.lineTo(px + pr * Math.cos(a), py + pr * Math.sin(a)); } x.closePath(); };
+  x.fillStyle = '#a86d10'; poly(cx, cy + r * .08, r); x.fill();
+  const g = x.createRadialGradient(cx - r * .3, cy - r * .4, 0, cx, cy, r * 1.1);
+  g.addColorStop(0, '#fff3c4'); g.addColorStop(.45, '#f7c948'); g.addColorStop(1, '#c98a1c');
+  x.fillStyle = g; poly(cx, cy, r); x.fill();
+  x.setLineDash([r * .09, r * .1]); x.strokeStyle = '#b9821c'; x.lineWidth = r * .065; poly(cx, cy, r * .78); x.stroke(); x.setLineDash([]);
+  x.fillStyle = '#8a5a0a'; x.textAlign = 'center'; x.textBaseline = 'alphabetic'; x.font = `400 ${r}px 'DM Serif Display',Georgia,serif`; x.fillText('£1', cx, cy + r * .34);
+  x.restore();
+}
+function slotDraw(x, cx, y, w) {
+  rrect(x, cx - w / 2, y, w, w * .28, w * .1); x.fillStyle = '#2b1452'; x.fill(); x.strokeStyle = 'rgba(247,201,72,.55)'; x.lineWidth = 3; x.stroke();
+  rrect(x, cx - w * .33, y + w * .1, w * .66, w * .08, w * .04); x.fillStyle = '#0c0618'; x.fill();
+}
+function text(x, t, cx, y, font, fill, ls, glow) {
+  x.font = font; x.fillStyle = fill; x.textAlign = 'center'; x.textBaseline = 'alphabetic';
+  if ('letterSpacing' in x) x.letterSpacing = ls || '0px';
+  if (glow) { x.shadowColor = glow; x.shadowBlur = 16; }
+  x.fillText(t, cx, y);
+  x.shadowBlur = 0;
+  if ('letterSpacing' in x) x.letterSpacing = '0px';
+}
+function gradTitle(x, t, cx, y, size) {
+  const font = `400 ${size}px 'DM Serif Display',Georgia,serif`; x.font = font;
+  const w = x.measureText(t).width, g = x.createLinearGradient(cx - w / 2, 0, cx + w / 2, 0);
+  g.addColorStop(0, '#a855f7'); g.addColorStop(1, '#ff3d8b');
+  text(x, t, cx, y, font, g);
+}
+function ledBox(x, t, cx, y, size, col) {
+  const font = `400 ${size}px 'DotGothic16',monospace`; x.font = font;
+  if ('letterSpacing' in x) x.letterSpacing = `${size * .08}px`;
+  const w = x.measureText(t).width + size * 1.4, h = size * 1.7;
+  if ('letterSpacing' in x) x.letterSpacing = '0px';
+  rrect(x, cx - w / 2, y - h * .72, w, h, size * .3); x.fillStyle = '#0c0618'; x.fill();
+  x.strokeStyle = col; x.globalAlpha = .45; x.lineWidth = 2; x.stroke(); x.globalAlpha = 1;
+  x.save(); x.beginPath(); rrect(x, cx - w / 2, y - h * .72, w, h, size * .3); x.clip(); x.fillStyle = 'rgba(255,255,255,.05)';
+  for (let px = cx - w / 2; px < cx + w / 2; px += 6) for (let py = y - h * .72; py < y + h * .3; py += 6) x.fillRect(px, py, 1.6, 1.6);
+  x.restore();
+  text(x, t, cx, y + size * .1, font, col, `${size * .08}px`, col);
+}
+function footerLine(x, cx, y, size) {
+  const a = 'A new daily logic puzzle from ', b = 'Puzzl';
+  const fa = `500 ${size}px 'DM Sans',sans-serif`, fb = `700 ${size}px 'DM Sans',sans-serif`;
+  x.font = fa; const wa = x.measureText(a).width; x.font = fb; const wb = x.measureText(b).width;
+  const sx = cx - (wa + wb) / 2; x.textAlign = 'left';
+  x.font = fa; x.fillStyle = '#b9a6d6'; x.fillText(a, sx, y);
+  x.font = fb; x.fillStyle = '#ffffff'; x.fillText(b, sx + wa, y);
+}
+function pill(x, t, cx, y, h, size) {
+  const font = `italic 400 ${size}px 'DM Serif Display',Georgia,serif`; x.font = font;
+  const w = x.measureText(t).width + h;
+  rrect(x, cx - w / 2, y, w, h, h / 2); x.fillStyle = '#2b1452'; x.fill(); x.strokeStyle = 'rgba(247,201,72,.55)'; x.lineWidth = 2; x.stroke();
+  text(x, t, cx, y + h / 2 + size * .33, font, '#ffe39a');
+  return w;
+}
+const SQ_COL = {clean: '#4ade80', helped: '#ffb020', missed: '#ff5a6e', skipped: '#3a2560'};
+
+async function drawShare() {
+  await fontsReady();
+  const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const x = cv.getContext('2d');
+  bgStage(x, W, H);
+  frameLine(x, 60, 60, 960, 1230);
+  const n = solvedCount(), st = streakNow();
+  coinDraw(x, 540, 190, 62);
+  slotDraw(x, 540, 262, 190);
+  ledBox(x, `EPISODE ${DAY}`, 540, 395, 30, '#3be3ff');
+  gradTitle(x, 'Quids In', 540, 540, 150);
+  text(x, 'Where quick thinking pays off!', 540, 608, "italic 400 46px 'DM Serif Display',Georgia,serif", '#ffe39a');
+  const s = 150, gap = 28, sx = 540 - (PER_DAY * s + (PER_DAY - 1) * gap) / 2;
+  S.results.forEach((r, i) => { rrect(x, sx + i * (s + gap), 660, s, s, 28); x.fillStyle = SQ_COL[r.k]; x.fill(); });
+  ledBox(x, `BANKED ${money(banked())}`, 540, 925, 58, '#f7c948');
+  text(x, `${n} of ${PER_DAY} correct${st > 1 ? `  ·  ${st} day streak` : ''}`, 540, 1020, "500 36px 'DM Sans',sans-serif", '#f1e8ff');
+  pill(x, '“Can you bank more?”', 540, 1060, 88, 42);
+  text(x, SITE_URL.replace(/^https?:\/\//, '').replace(/\/$/, ''), 540, 1205, "400 28px 'DotGothic16',monospace", '#b9a6d6');
+  footerLine(x, 540, 1328, 26);
+  return cv;
+}
+async function shareImage() {
+  const cv = await drawShare();
+  const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+  const file = new File([blob], `quids-in-${DAY}.png`, {type: 'image/png'});
+  if (navigator.canShare && navigator.canShare({files: [file]})) {
+    try { await navigator.share({files: [file], text: shareText()}); } catch (e) {}
+    return;
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast('Image saved');
+}
+
+async function drawOG() {
+  await fontsReady();
+  const W = 1200, H = 630, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const x = cv.getContext('2d');
+  bgStage(x, W, H);
+  frameLine(x, 110, 46, 980, 536);
+  coinDraw(x, 210, 262, 46); slotDraw(x, 210, 318, 136);
+  coinDraw(x, 990, 262, 46); slotDraw(x, 990, 318, 136);
+  ledBox(x, "TONIGHT'S EPISODE", 600, 150, 22, '#3be3ff');
+  gradTitle(x, 'Quids In', 600, 284, 116);
+  text(x, 'Where quick thinking pays off!', 600, 348, "italic 400 42px 'DM Serif Display',Georgia,serif", '#ffe39a');
+  text(x, 'Three logic questions. 60 seconds each. Every day.', 600, 398, "500 26px 'DM Sans',sans-serif", '#b9a6d6');
+  const pills = ['“O, T, T, F, F, S, S, E…”', '“All but 9 run away”', '“Every label is wrong”'];
+  x.font = "italic 400 23px 'DM Serif Display',Georgia,serif";
+  const ws = pills.map(p => x.measureText(p).width + 52), total = ws.reduce((a, c) => a + c, 0) + 32;
+  let px = 600 - total / 2;
+  pills.forEach((p, i) => { pill(x, p, px + ws[i] / 2, 440, 52, 23); px += ws[i] + 16; });
+  footerLine(x, 600, 612, 20);
+  return cv;
+}
+
+/* ================= Start ================= */
+function openM(id) { $(id).classList.add('open'); const c = $(id).querySelector('[data-close]'); c && c.focus({preventScroll: true}); }
+function init() {
+  render();
+  $('answerBtn').addEventListener('click', onGuess);
+  $('guess').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) onGuess(e); });
+  $('opts').addEventListener('click', e => { const b = e.target.closest('.opt'); if (b && !b.disabled) onPick(+b.dataset.i); });
+  $('goBtn').onclick = next;
+  $('hintBtn').onclick = useHint;
+  $('helpBtn').onclick = () => openM('helpModal');
+  $('statsBtn').onclick = () => { renderStats(); tick(); openM('statsModal'); };
+  const sb = $('soundBtn');
+  const paintSound = () => { sb.setAttribute('aria-pressed', SFX.on); sb.setAttribute('aria-label', SFX.on ? 'Sound on' : 'Sound off'); };
+  paintSound();
+  sb.onclick = () => { SFX.toggle(); paintSound(); toast(SFX.on ? 'Sound on' : 'Sound off'); };
+  ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, () => SFX.unlock(), {passive: true}));
+  document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => {
+    if (e.target === m || e.target.closest('[data-close]')) m.classList.remove('open');
+  }));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal.open').forEach(m => m.classList.remove('open')); });
+  if (!store.get('quidsin-seen', false)) { openM('helpModal'); store.set('quidsin-seen', true); }
+  setInterval(() => { tick(); if (S.stage === 'play' && remaining() <= 0) timeUp(); }, 500);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) return;
+    if (dayNumber() !== DAY) location.reload();
+    else if (S.stage === 'play') loop();
+  });
+}
+
+if (new URLSearchParams(location.search).has('og')) {
+  document.body.innerHTML = '<div class="og"><p class="kicker" style="margin-bottom:12px">og-image, 1200×630</p><div id="ogc"></div><button class="btn" id="ogdl" style="margin-top:16px">Download og-image.png</button></div>';
+  drawOG().then(cv => {
+    $('ogc').appendChild(cv);
+    $('ogdl').onclick = () => cv.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'og-image.png'; a.click(); }, 'image/png');
+  });
+} else {
+  init();
+}
+</script>
+</body>
+</html>
