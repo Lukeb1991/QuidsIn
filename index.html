@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#160a2a">
 <title>Quids In · Puzzl</title>
-<meta name="description" content="Three logic questions. Sixty seconds each. Every second left is £1 in the bank. A daily gameshow puzzle from Puzzl.">
+<meta name="description" content="Three logic questions. Sixty seconds each. Every second left is a pretend pound in the bank. A daily gameshow puzzle from Puzzl.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Puzzl">
-<meta property="og:title" content="Quids In · Where quick thinking pays off!">
-<meta property="og:description" content="Three logic questions. Sixty seconds each. Every second left is £1 in the bank.">
+<meta property="og:title" content="Quids In · Pretend pounds. Real bragging rights.">
+<meta property="og:description" content="Three logic questions. Sixty seconds each. Every second left is a pretend pound in the bank.">
 <meta property="og:url" content="https://playpuzzl.com/QuidsIn/">
 <meta property="og:image" content="https://playpuzzl.com/QuidsIn/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -245,7 +245,7 @@ footer b{color:#fff}
     </svg>
   </div>
   <h1>Quids In</h1>
-  <p class="sub">Where quick thinking pays off!</p>
+  <p class="sub">Pretend pounds. Real bragging rights.</p>
 
   <section id="play">
     <div class="status">
@@ -1006,7 +1006,7 @@ async function drawShare() {
   slotDraw(x, 540, 262, 190);
   ledBox(x, `EPISODE ${DAY}`, 540, 395, 30, '#3be3ff');
   gradTitle(x, 'Quids In', 540, 540, 150);
-  text(x, 'Where quick thinking pays off!', 540, 608, "italic 400 46px 'DM Serif Display',Georgia,serif", '#ffe39a');
+  text(x, 'Pretend pounds. Real bragging rights.', 540, 608, "italic 400 46px 'DM Serif Display',Georgia,serif", '#ffe39a');
   const s = 150, gap = 28, sx = 540 - (PER_DAY * s + (PER_DAY - 1) * gap) / 2;
   S.results.forEach((r, i) => { rrect(x, sx + i * (s + gap), 660, s, s, 28); x.fillStyle = SQ_COL[r.k]; x.fill(); });
   ledBox(x, `BANKED ${money(banked())}`, 540, 925, 58, '#f7c948');
@@ -1039,7 +1039,7 @@ async function drawOG() {
   coinDraw(x, 990, 262, 46); slotDraw(x, 990, 318, 136);
   ledBox(x, "TONIGHT'S EPISODE", 600, 150, 22, '#3be3ff');
   gradTitle(x, 'Quids In', 600, 284, 116);
-  text(x, 'Where quick thinking pays off!', 600, 348, "italic 400 42px 'DM Serif Display',Georgia,serif", '#ffe39a');
+  text(x, 'Pretend pounds. Real bragging rights.', 600, 348, "italic 400 35px 'DM Serif Display',Georgia,serif", '#ffe39a');
   text(x, 'Three logic questions. 60 seconds each. Every day.', 600, 398, "500 26px 'DM Sans',sans-serif", '#b9a6d6');
   const pills = ['“O, T, T, F, F, S, S, E…”', '“All but 9 run away”', '“Every label is wrong”'];
   x.font = "italic 400 23px 'DM Serif Display',Georgia,serif";
