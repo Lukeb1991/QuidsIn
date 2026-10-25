@@ -103,6 +103,16 @@ h1{font:400 58px/1 var(--serif);text-align:center;margin-top:2px;background:var(
 .clock.urgent{color:var(--pink);border-color:rgba(255,61,139,.5);animation:throb 1s steps(2) infinite}
 @keyframes throb{50%{opacity:.55}}
 .qtext{font:700 21px/1.4 var(--sans);letter-spacing:-.005em;min-height:2.8em}
+.podium{scroll-margin-top:8px}
+/* While the keyboard is up on a phone: hide the title so the question and answer box fit above it */
+@media (pointer:coarse){
+  body.typing .emblem,body.typing h1,body.typing .sub{display:none}
+  body.typing .status{margin-top:8px}
+  body.typing .qtext{font-size:19px;min-height:0}
+  body.typing .show{margin-top:10px;padding:8px 10px;font-size:21px}
+  body.typing .bulbs{margin-top:12px;padding:8px 14px}
+  body.typing .msg{min-height:0;margin-top:8px}
+}
 .caret{display:inline-block;width:3px;height:1em;background:var(--gold);vertical-align:-3px;margin-left:2px;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 .show{margin-top:14px;font:400 24px/1.45 var(--led);color:var(--gold);text-align:center;white-space:pre-line;padding:12px 10px;word-spacing:.08em;border-color:rgba(247,201,72,.3)}
@@ -697,6 +707,12 @@ function render(opts = {}) {
   else { lastSec = -1; paintClock(remaining(), true); loop(); }
 }
 
+/* Keep the question in view above the phone keyboard */
+function fitKeyboard() {
+  if (!document.body.classList.contains('typing')) return;
+  $('podium').scrollIntoView({block: 'start', behavior: 'auto'});
+}
+
 /* ================= Game flow ================= */
 let typeTimer = 0;
 function typewrite(el, text, ms, done) {
@@ -719,7 +735,7 @@ function startQuestion() {
   save(); say('');
   SFX.sting(S.idx === PER_DAY - 1);
   render({typing: true});
-  if (!q.o) { $('guess').value = ''; $('guess').focus({preventScroll: true}); }
+  if (!q.o) $('guess').value = '';   // no auto-focus: the keyboard only opens when the player taps the box
   typewrite($('qtext'), q.q, typeMs, () => { const sh = $('show'); if (sh) sh.style.visibility = ''; });
 }
 
@@ -776,7 +792,6 @@ function onGuess(e) {
   if (wrong()) return;
   save(); renderStatus();
   $('tries').innerHTML = S.tries.map(t => `<span>${esc(t)}</span>`).join('');
-  inp.focus({preventScroll: true});
 }
 
 function timeUp() {
@@ -792,7 +807,7 @@ function useHint() {
   h.innerHTML = `<b>The host leans in:</b> ${esc(TODAY[S.idx].h)}`;
   $('cardBody').appendChild(h);
   $('hintBtn').hidden = true;
-  if (!TODAY[S.idx].o) $('guess').focus({preventScroll: true});
+  fitKeyboard();
 }
 
 function next() {
@@ -1055,6 +1070,15 @@ function openM(id) { $(id).classList.add('open'); const c = $(id).querySelector(
 function init() {
   render();
   $('answerBtn').addEventListener('click', onGuess);
+  // tapping "Lock it in" mustn't steal focus, or the keyboard would close and reopen after a wrong answer
+  ['pointerdown', 'mousedown'].forEach(ev => $('answerBtn').addEventListener(ev, e => { if (document.activeElement === $('guess')) e.preventDefault(); }));
+  $('guess').addEventListener('focus', () => {
+    if (!matchMedia('(pointer:coarse)').matches) return;
+    document.body.classList.add('typing');
+    fitKeyboard(); setTimeout(fitKeyboard, 350);   // again once the keyboard has finished sliding up
+  });
+  $('guess').addEventListener('blur', () => document.body.classList.remove('typing'));
+  if (window.visualViewport) visualViewport.addEventListener('resize', fitKeyboard);
   $('guess').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) onGuess(e); });
   $('opts').addEventListener('click', e => { const b = e.target.closest('.opt'); if (b && !b.disabled) onPick(+b.dataset.i); });
   $('goBtn').onclick = next;
